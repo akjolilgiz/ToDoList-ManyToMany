@@ -2,19 +2,13 @@
   Layout = "_Layout";
 }
 <p>Item index</p>
+@if (Model.Count != 0)
+{
+<h4>No Items have been made</h4>
+}
 @foreach (var item in Model)
 {
-    <h4>@item.description | <a href="/items/@item.id/update">Edit</a></h4>
+    <h4>@item.description</h4>
 }
-<form action="/items/sorted" method = "post">
-<div class="form-group">
-<select class="form-control" name="order" id="order">
-<option>ASC</option>
-<option>DESC</option>
-</select>
-</div>
-<button type="submit" class="btn btn-info">Filter</button>
-</form>
-<a href = "/items/new">Add New Items</a>
 
-<a href = "/items/sorted">Sort Items</a>
+<a href = "/items/new">Add New Items</a>
