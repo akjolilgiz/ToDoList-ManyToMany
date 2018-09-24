@@ -8,7 +8,7 @@
 }
 @foreach (var item in Model)
 {
-    <h4>@item.description</h4>
+    <h4><a href = "items/@item.id">@item.description</a> by : @item.dueDate</h4>
 }
 
 <a href = "/items/new">Add New Items</a>

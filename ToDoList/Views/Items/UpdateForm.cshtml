@@ -6,7 +6,9 @@
 <h2>Edit item: @Model["item"].description</h2>
 <form action="/items/@Model["item"].id/update" method="post">
     <label for="newDescription">Name:</label>
-    <input type="text" name="newDescription" value="@Model["item"].description">
+    <input type="text" name="newDescription"
+    <label for='newDueDate'>Item due date</label>
+    <input id='newDueDate' name='newDueDate' type='datetime'> value="@Model["item"].description">
     <select>
       @foreach (var category in Model["categories"])
       {
