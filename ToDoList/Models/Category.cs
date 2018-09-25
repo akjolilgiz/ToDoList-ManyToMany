@@ -199,7 +199,8 @@ namespace ToDoList.Models
               int itemId = rdr.GetInt32(0);
               string itemDescription = rdr.GetString(1);
               string itemDueDate = rdr.GetString(2);
-              Item newItem = new Item(itemDescription, itemDueDate, itemId);
+              string itemStatus = rdr.GetString(3);
+              Item newItem = new Item(itemDescription, itemDueDate, itemStatus, itemId);
               items.Add(newItem);
             }
             conn.Close();

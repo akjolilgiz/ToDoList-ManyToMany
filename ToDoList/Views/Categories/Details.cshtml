@@ -14,7 +14,7 @@
   </ul>
 }
 
-Status of this Item is : @Model.status
+Status of this Item is : @Model["categoryItems"].status
 <h4>Add an item to this category: </h4>
 <form action = '/categories/@Model["selectedCategory"].GetId()/items/new' method='post'>
   <label for = 'itemId'>Select an item</label>

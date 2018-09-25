@@ -13,12 +13,12 @@ namespace ToDoList.Models
     public string dueDate {get; set; }
     public string status {get; set; }
 
-    public Item(string Description, string newDueDate, int Id = 0)
+    public Item(string Description, string newDueDate, string newStatus="not done", int Id = 0)
     {
       id = Id;
       description = Description;
       dueDate = newDueDate;
-      status = status;
+      status = newStatus;
     }
 
     public void Edit(string newDescription, string newDueDate, string newStatus)
@@ -127,7 +127,8 @@ namespace ToDoList.Models
           int itemId = rdr.GetInt32(0);
           string itemDescription = rdr.GetString(1);
           string itemDueDate = rdr.GetString(2);
-          Item newItem = new Item(itemDescription, itemDueDate, itemId);
+          string itemStatus = rdr.GetString(3);
+          Item newItem = new Item(itemDescription, itemDueDate, itemStatus, itemId);
           allItems.Add(newItem);
         }
         conn.Close();
@@ -144,12 +145,17 @@ namespace ToDoList.Models
       conn.Open();
 
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO items (description, dueDate) VALUES (@itemDescription, @dueDate);";
+      cmd.CommandText = @"INSERT INTO items (description, dueDate, status) VALUES (@itemDescription, @dueDate, @status);";
 
       MySqlParameter Description = new MySqlParameter();
       Description.ParameterName = "@itemDescription";
       Description.Value = this.description;
       cmd.Parameters.Add(Description);
+
+      MySqlParameter status = new MySqlParameter();
+      status.ParameterName = "@status";
+      status.Value = this.status;
+      cmd.Parameters.Add(status);
 
       MySqlParameter DueDate = new MySqlParameter();
       DueDate.ParameterName = "@dueDate";
@@ -166,26 +172,30 @@ namespace ToDoList.Models
       }
     }
 
-    public void Status(string status)
+    public void Status(string newStatus)
     {
       MySqlConnection conn = DB.Connection();
       conn.Open();
-
       var cmd = conn.CreateCommand() as MySqlCommand;
-      cmd.CommandText = @"INSERT INTO items (status) VALUES (@Status);";
+      cmd.CommandText = @"UPDATE items SET status = @newStatus WHERE id = @searchId;";
 
-      MySqlParameter Status = new MySqlParameter();
-      Status.ParameterName = "@Status";
-      Status.Value = this.status;
-      cmd.Parameters.Add(Status);
+      MySqlParameter searchId = new MySqlParameter();
+      searchId.ParameterName = "@searchId";
+      searchId.Value = id;
+      cmd.Parameters.Add(searchId);
+
+      MySqlParameter itemStatus = new MySqlParameter();
+      itemStatus.ParameterName = "@newStatus";
+      itemStatus.Value = status;
+      cmd.Parameters.Add(itemStatus);
 
       cmd.ExecuteNonQuery();
-      id = (int) cmd.LastInsertedId;
+      status = newStatus;
 
       conn.Close();
-      if (conn !=null)
+      if (conn != null)
       {
-        conn.Dispose();
+          conn.Dispose();
       }
     }
 
@@ -220,6 +230,7 @@ namespace ToDoList.Models
         bool idEquality = (this.id == newItem.id);
         bool descriptionEquality = (this.description == newItem.description);
         bool dueDateEquality = (this.dueDate == newItem.dueDate);
+        bool statusEquality = (this.status == newItem.status);
         return (descriptionEquality && idEquality);
       }
     }
@@ -246,16 +257,18 @@ namespace ToDoList.Models
       int itemId = 0;
       string itemDescription = "";
       string itemDueDate = "";
+      string itemStatus ="done";
 
       while (rdr.Read())
       {
           itemId = rdr.GetInt32(0);
           itemDescription = rdr.GetString(1);
           itemDueDate = rdr.GetString(2);
+          itemStatus = rdr.GetString(3);
 
       }
 
-      Item foundItem= new Item(itemDescription, itemDueDate, itemId);  // This line is new!
+      Item foundItem= new Item(itemDescription, itemDueDate, itemStatus, itemId);  // This line is new!
 
        conn.Close();
        if (conn != null)

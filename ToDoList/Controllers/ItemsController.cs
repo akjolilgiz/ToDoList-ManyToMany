@@ -50,15 +50,25 @@ namespace ToDoList.Controllers
      }
 
      [HttpGet("/items/{id}/status")]
-     public ActionResult Done(int id)
+     public ActionResult Form(int id)
      {
        Item foundItem = Item.Find(id);
        foundItem.Status(Request.Form["itemStatus"]);
        foundItem.Save();
        Console.WriteLine(foundItem);
 
-       return RedirectToAction("Details", new {id = id});
+       return RedirectToAction("Details");
      }
+     // [HttpPost("/items/{id}/status")]
+     // public ActionResult Done(int id)
+     // {
+     //   Item foundItem = Item.Find(id);
+     //   foundItem.Status(Request.Form["itemStatus"]);
+     //   foundItem.Save();
+     //   Console.WriteLine(foundItem);
+     //
+     //   return RedirectToAction("Details");
+     // }
 
 
     // [HttpGet("/items/{id}/update")]
