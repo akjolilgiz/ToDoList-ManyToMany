@@ -20,7 +20,7 @@ namespace ToDoList.Controllers
         return View();
     }
     [HttpPost("/items")]
-    public ActionResult Create(string description, string dueDate)
+    public ActionResult Create(string description, string status, string dueDate)
     {
       Item newItem = new Item(description, dueDate);
       newItem.Save();
@@ -34,9 +34,11 @@ namespace ToDoList.Controllers
          Item selectedItem = Item.Find(id);
          List<Category> itemCategories = selectedItem.GetCategories();
          List<Category> allCategories = Category.GetAll();
+
          model.Add("selectedItem", selectedItem);
          model.Add("itemCategories", itemCategories);
          model.Add("allCategories", allCategories);
+
          return View(model);
 
      }
@@ -49,16 +51,15 @@ namespace ToDoList.Controllers
          return RedirectToAction("Details",  new { id = itemId });
      }
 
-     [HttpGet("/items/{id}/status")]
+     [HttpPost("/items/{id}/status")]
      public ActionResult Form(int id)
      {
        Item foundItem = Item.Find(id);
        foundItem.Status(Request.Form["itemStatus"]);
-       foundItem.Save();
        Console.WriteLine(foundItem);
 
-       return RedirectToAction("Details");
-     }
+       return RedirectToAction("Details", new {id = id});
+    //  }
      // [HttpPost("/items/{id}/status")]
      // public ActionResult Done(int id)
      // {
@@ -106,6 +107,6 @@ namespace ToDoList.Controllers
     //     return RedirectToAction("Index");
     // }
 
-
+  }
   }
 }

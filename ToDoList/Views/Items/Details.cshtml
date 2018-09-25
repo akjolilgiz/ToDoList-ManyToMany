@@ -3,19 +3,19 @@
 <h1>To Do List</h1>
 <h2>Item: @Model["selectedItem"].description</h2>
 
-  <form action = '/items/@Model["selectedItem"].id' method='post'>
+  <form action = '/items/@Model["selectedItem"].id/status' method='post'>
     <label for = 'itemStatus'>Select a Status</label>
     <select id='itemStatus' name='itemStatus' type='text'>
      {
-      <option>Done</option>
-      <option>Not Done</option>
+      <option value="done">Done</option>
+      <option value ="not done">Not Done</option>
      }
     </select>
     <button type = 'submit'>Add</button>
   </form>
 
 <hr />
-<h1> The Status of this item : @Model["selectedItem"].status
+<h1> The Status of this item : @Model["selectedItem"].status</h1>
 @if (@Model["itemCategories"].Count != 0)
 {
   <h4>This item has these categories:</h4>

@@ -13,7 +13,7 @@ namespace ToDoList.Models
     public string dueDate {get; set; }
     public string status {get; set; }
 
-    public Item(string Description, string newDueDate, string newStatus="not done", int Id = 0)
+    public Item(string Description, string newDueDate, string newStatus = "not done", int Id = 0)
     {
       id = Id;
       description = Description;
@@ -186,7 +186,7 @@ namespace ToDoList.Models
 
       MySqlParameter itemStatus = new MySqlParameter();
       itemStatus.ParameterName = "@newStatus";
-      itemStatus.Value = status;
+      itemStatus.Value = newStatus;
       cmd.Parameters.Add(itemStatus);
 
       cmd.ExecuteNonQuery();
